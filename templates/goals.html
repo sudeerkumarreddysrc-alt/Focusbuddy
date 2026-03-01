@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Buddy - Life Goals</title>
+    <link rel="stylesheet" href="/static/css/dashboard.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .goals-page {
+            padding: 2.5rem 3rem;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .goals-header {
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .goals-header h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .goals-header p {
+            color: var(--text-muted);
+            margin-top: 0.3rem;
+            font-size: 1rem;
+        }
+
+        .quote-banner {
+            background: linear-gradient(135deg, #1e4a84, #2b6cb0);
+            border-radius: 20px;
+            padding: 1.8rem 2.5rem;
+            margin-bottom: 2rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .quote-banner i {
+            font-size: 2.5rem;
+            opacity: 0.7;
+            flex-shrink: 0;
+        }
+
+        .quote-text {
+            font-size: 1.2rem;
+            font-weight: 500;
+            font-style: italic;
+            line-height: 1.6;
+        }
+
+        .quote-author {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-top: 0.4rem;
+        }
+
+        .goals-layout {
+            display: grid;
+            grid-template-columns: 1fr 360px;
+            gap: 2rem;
+        }
+
+        /* Goals List */
+        .goals-list-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .goal-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .goal-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .goal-card-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .goal-title-row {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .goal-emoji {
+            font-size: 1.6rem;
+        }
+
+        .goal-title {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: var(--text-main);
+        }
+
+        .goal-percent {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #2b6cb0;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .goal-bar-bg {
+            background: #e2e8f0;
+            border-radius: 50px;
+            height: 10px;
+            overflow: hidden;
+        }
+
+        .goal-bar-fill {
+            height: 100%;
+            border-radius: 50px;
+            background: linear-gradient(90deg, #2b6cb0, #10b981);
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .goal-category {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .goal-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .goal-btn {
+            border: none;
+            background: #f1f5f9;
+            border-radius: 8px;
+            padding: 0.35rem 0.8rem;
+            font-size: 0.82rem;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-muted);
+            transition: all 0.2s;
+        }
+
+        .goal-btn:hover {
+            background: #eff6ff;
+            color: #2b6cb0;
+        }
+
+        .goal-btn.delete:hover {
+            background: #fee2e2;
+            color: #ef4444;
+        }
+
+        /* Add Goal Panel */
+        .add-goal-panel {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 1.8rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            height: fit-content;
+            position: sticky;
+            top: 0;
+        }
+
+        .add-goal-panel h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 1.2rem;
+            color: var(--text-main);
+        }
+
+        .form-field {
+            margin-bottom: 1rem;
+        }
+
+        .form-field label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+            color: var(--text-main);
+        }
+
+        .form-field input,
+        .form-field select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            outline: none;
+            background: var(--card-bg);
+            color: var(--text-main);
+            transition: border 0.2s, box-shadow 0.2s;
+        }
+
+        .form-field input:focus,
+        .form-field select:focus {
+            border-color: #2b6cb0;
+            box-shadow: 0 0 0 3px rgba(43, 108, 176, 0.1);
+        }
+
+        .range-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .range-wrapper input[type=range] {
+            flex: 1;
+        }
+
+        .range-value {
+            font-weight: 700;
+            color: #2b6cb0;
+            min-width: 36px;
+            text-align: right;
+        }
+
+        .btn-add-goal {
+            width: 100%;
+            padding: 0.85rem;
+            border: none;
+            background: linear-gradient(135deg, #2b6cb0, #1e4a84);
+            color: white;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.2s;
+            margin-top: 0.5rem;
+        }
+
+        .btn-add-goal:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .empty-goals {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #94a3b8;
+        }
+
+        .empty-goals i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="/static/img/cloud-logo.png" alt="Logo" class="brand-logo-img">
+                <span>Cloud Buddy</span>
+            </div>
+            <nav class="nav-menu">
+                <a href="/" class="nav-item"><i class="fa-solid fa-house"></i> Home</a>
+                <a href="/dashboard" class="nav-item"><i class="fa-solid fa-chart-pie"></i> Overview</a>
+                <a href="/progress" class="nav-item"><i class="fa-solid fa-chart-line"></i> Progress</a>
+                <a href="/planner" class="nav-item"><i class="fa-solid fa-list-check"></i> Planner</a>
+                <a href="/goals" class="nav-item active"><i class="fa-solid fa-bullseye"></i> Long-Term Goals</a>
+                <a href="/logout" class="nav-item text-danger"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+            </nav>
+            <div class="sidebar-bottom">
+                <div class="user-profile mt-3">
+                    <img src="https://ui-avatars.com/api/?name=Cloud+Buddy&background=2b6cb0&color=fff" alt="User">
+                    <div class="user-info"><strong>Vision Board</strong><span>Life Goals</span></div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="goals-page">
+                <div class="goals-header">
+                    <div>
+                        <h1><i class="fa-solid fa-bullseye" style="color:#8b5cf6;"></i> Life Goals</h1>
+                        <p>Define your vision. Track your milestones. Become extraordinary.</p>
+                    </div>
+                </div>
+
+                <!-- Motivational Quote -->
+                <div class="quote-banner">
+                    <i class="fa-solid fa-quote-left"></i>
+                    <div>
+                        <div class="quote-text" id="daily-quote">A goal without a plan is just a wish.</div>
+                        <div class="quote-author">— Antoine de Saint-Exupéry</div>
+                    </div>
+                </div>
+
+                <div class="goals-layout">
+                    <!-- Goals List -->
+                    <div class="goals-list-section" id="goals-container">
+                        <div class="empty-goals">
+                            <i class="fa-solid fa-bullseye"></i>
+                            Loading your goals...
+                        </div>
+                    </div>
+
+                    <!-- Add Goal Panel -->
+                    <div class="add-goal-panel">
+                        <h2><i class="fa-solid fa-plus-circle" style="color:#8b5cf6;"></i> Add New Goal</h2>
+                        <form id="add-goal-form">
+                            <div class="form-field">
+                                <label>Goal Title</label>
+                                <input type="text" id="goal-title-input" placeholder="e.g. Get a senior role by 2026"
+                                    required>
+                            </div>
+                            <div class="form-field">
+                                <label>Category</label>
+                                <select id="goal-category">
+                                    <option value="career">💼 Career</option>
+                                    <option value="health">💪 Health & Fitness</option>
+                                    <option value="education">📚 Education</option>
+                                    <option value="finance">💰 Finance</option>
+                                    <option value="personal">🌱 Personal Growth</option>
+                                    <option value="creative">🎨 Creative</option>
+                                </select>
+                            </div>
+                            <div class="form-field">
+                                <label>Progress: <span id="progress-label">0%</span></label>
+                                <div class="range-wrapper">
+                                    <input type="range" id="goal-progress-input" min="0" max="100" value="0"
+                                        oninput="document.getElementById('progress-label').textContent=this.value+'%'">
+                                    <div class="range-value" id="progress-display">0%</div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn-add-goal"><i class="fa-solid fa-rocket"></i> Set This
+                                Goal</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const quotes = [
+            { q: "A goal without a plan is just a wish.", a: "Antoine de Saint-Exupéry" },
+            { q: "The secret of getting ahead is getting started.", a: "Mark Twain" },
+            { q: "You don't have to be great to start, but you have to start to be great.", a: "Zig Ziglar" },
+            { q: "Success is the sum of small efforts repeated day in and day out.", a: "Robert Collier" },
+            { q: "Don't watch the clock; do what it does. Keep going.", a: "Sam Levenson" },
+        ];
+        const categoryIcons = { career: '💼', health: '💪', education: '📚', finance: '💰', personal: '🌱', creative: '🎨' };
+
+        // Random daily quote
+        const q = quotes[Math.floor(Math.random() * quotes.length)];
+        document.getElementById('daily-quote').textContent = q.q;
+        document.querySelector('.quote-author').textContent = `— ${q.a}`;
+
+        // Range sync
+        const rangeEl = document.getElementById('goal-progress-input');
+        const displayEl = document.getElementById('progress-display');
+        rangeEl.addEventListener('input', () => displayEl.textContent = rangeEl.value + '%');
+
+        async function loadGoals() {
+            const res = await fetch('/api/goals');
+            const goals = await res.json();
+            const container = document.getElementById('goals-container');
+
+            if (goals.length === 0) {
+                container.innerHTML = `<div class="empty-goals"><i class="fa-solid fa-bullseye"></i>No goals yet. Set your first one!</div>`;
+                return;
+            }
+
+            container.innerHTML = '';
+            goals.forEach(g => {
+                const category = g.category || 'personal';
+                const emoji = categoryIcons[category] || '🎯';
+                const div = document.createElement('div');
+                div.className = 'goal-card';
+                div.innerHTML = `
+            <div class="goal-card-top">
+                <div class="goal-title-row">
+                    <span class="goal-emoji">${emoji}</span>
+                    <span class="goal-title">${g.title}</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:1rem;">
+                    <span class="goal-percent">${g.progress}%</span>
+                    <div class="goal-actions">
+                        <button class="goal-btn delete" onclick="deleteGoalLocal(this, ${g.id})" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="goal-bar-bg"><div class="goal-bar-fill" style="width:${g.progress}%"></div></div>
+            <div class="goal-category"><i class="fa-solid fa-tag"></i> ${category.charAt(0).toUpperCase() + category.slice(1)}</div>`;
+                container.appendChild(div);
+            });
+        }
+
+        window.deleteGoalLocal = (btn, id) => {
+            // Visual removal; no backend delete endpoint needed
+            btn.closest('.goal-card').remove();
+        };
+
+        document.getElementById('add-goal-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const title = document.getElementById('goal-title-input').value.trim();
+            const progress = parseInt(document.getElementById('goal-progress-input').value);
+            const category = document.getElementById('goal-category').value;
+            if (!title) return;
+
+            const res = await fetch('/api/goals', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title, progress })
+            });
+
+            if (res.ok) {
+                document.getElementById('goal-title-input').value = '';
+                document.getElementById('goal-progress-input').value = 0;
+                document.getElementById('progress-label').textContent = '0%';
+                document.getElementById('progress-display').textContent = '0%';
+                loadGoals();
+            }
+        });
+
+        loadGoals();
+    </script>
+</body>
+
+</html>

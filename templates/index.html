@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Buddy - Beat Procrastination</title>
+    <!-- Use standard static links relative to the root for Flask -->
+    <link rel="stylesheet" href="/static/css/style.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="top-background">
+        <nav class="navbar">
+            <div class="logo">
+                <img src="/static/img/cloud-logo.png" alt="Cloud Logo" class="brand-logo-img">
+                <span>Cloud Buddy</span>
+            </div>
+            <div class="nav-links">
+                <a href="/dashboard">Dashboard</a>
+                <a href="/progress">Progress</a>
+                <a href="/dashboard">Settings</a>
+                <div class="user-profile">
+                    <a href="/login"
+                        style="text-decoration:none; color:inherit; display:flex; align-items:center; gap:8px;">
+                        <i class="fa-regular fa-circle-user profile-icon"></i>
+                        <span>Profile</span>
+                        <i class="fa-solid fa-caret-down nav-caret"></i>
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <main class="hero">
+            <div class="hero-content">
+                <h1>Beat Procrastination with<br>Cloud Buddy</h1>
+                <p>Stay on track, stay productive, and conquer your tasks using advanced anti-procrastination systems.
+                </p>
+            </div>
+            <div class="hero-illustration">
+                <!-- Our illustration from generate_image -->
+                <img src="/static/img/hero.png" alt="Productive Person Illustration">
+            </div>
+        </main>
+
+        <!-- The curved divider -->
+        <div class="wave">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120"
+                preserveAspectRatio="none">
+                <path
+                    d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V0C73.23,26.54,166.75,41.9,235.1,49.26C263.29,52.32,291.89,53.86,321.39,56.44Z"
+                    class="shape-fill"></path>
+            </svg>
+        </div>
+    </div>
+
+    <!-- The background below wave is exactly matching the wave path color var(--wave-fill) -->
+    <div class="bottom-section">
+        <section class="cards-section">
+            <div class="card">
+                <div class="card-icon-container">
+                    <div class="card-icon blue"><i class="fa-solid fa-clock"></i></div>
+                </div>
+                <h2>Quick Focus Session</h2>
+                <p>Start a timed work session to boost your productivity with our custom Pomodoro engine.</p>
+                <button class="card-btn btn-blue">Start Session</button>
+            </div>
+
+            <div class="card">
+                <div class="card-icon-container">
+                    <div class="card-icon blue"><i class="fa-solid fa-list-check"></i></div>
+                </div>
+                <h2>Task Planner</h2>
+                <p>Organize your to-do list, set priorities, and visualize your daily schedule.</p>
+                <button class="card-btn btn-blue">Plan Tasks</button>
+            </div>
+
+            <div class="card">
+                <div class="card-icon-container">
+                    <div class="card-icon red"><i class="fa-solid fa-bullseye"></i></div>
+                </div>
+                <h2>Goal Tracker</h2>
+                <p>Set, track, and achieve your long-term life goals with dynamic progress tracking.</p>
+                <button class="card-btn btn-blue">Track Goals</button>
+            </div>
+        </section>
+
+        <footer>
+            <div class="footer-line"></div>
+            <p>Procrastination is the enemy of success. Take control and make <strong>today count</strong>.</p>
+            <div class="team-branding">
+                <p>Brought to you by</p>
+                <div class="team-logo-container">
+                    <img src="/static/img/acetone-logo.png" alt="Team Acetone Logo">
+                    <span>Team Acetone</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="/static/js/main.js"></script>
+</body>
+
+</html>

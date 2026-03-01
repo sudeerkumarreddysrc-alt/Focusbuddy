@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Buddy - Dashboard</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="/static/css/dashboard.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="/static/img/cloud-logo.png" alt="Cloud Logo" class="brand-logo-img">
+                <span>Cloud Buddy</span>
+            </div>
+
+            <nav class="nav-menu">
+                <a href="/" class="nav-item">
+                    <i class="fa-solid fa-house"></i> Home
+                </a>
+                <a href="#overview" class="nav-item active">
+                    <i class="fa-solid fa-chart-pie"></i> Overview
+                </a>
+                <a href="/progress" class="nav-item">
+                    <i class="fa-solid fa-chart-line"></i> Progress
+                </a>
+                <a href="/planner" class="nav-item">
+                    <i class="fa-solid fa-list-check"></i> Planner
+                </a>
+                <a href="/goals" class="nav-item">
+                    <i class="fa-solid fa-bullseye"></i> Long-Term Goals
+                </a>
+                <a href="#" class="nav-item" id="open-settings-nav">
+                    <i class="fa-solid fa-gear"></i> Settings
+                </a>
+                <a href="/logout" class="nav-item text-danger">
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout
+                </a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <div class="user-profile mt-3">
+                    <img src="https://ui-avatars.com/api/?name=Acetone&background=2b6cb0&color=fff" alt="User">
+                    <div class="user-info">
+                        <strong>Team Acetone</strong>
+                        <span>Creators</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Dashboard Content -->
+        <main class="main-content">
+            <header class="top-header">
+                <div>
+                    <h1 class="page-title">Dashboard</h1>
+                    <p class="page-subtitle">Welcome back! Check your progress.</p>
+                </div>
+                <div class="header-actions">
+                    <div class="clock-display" id="live-clock">00:00:00</div>
+                </div>
+            </header>
+
+            <div class="bento-grid">
+                <!-- Pomodoro Timer Widget -->
+                <div class="bento-card timer-card">
+                    <div class="card-header">
+                        <h2 id="timer-title"><i class="fa-solid fa-clock timer-icon"></i> Quick Focus</h2>
+                        <span class="badge">Pomodoro</span>
+                    </div>
+                    <div class="mode-toggles mb-3">
+                        <button class="mode-btn active" data-work="25" data-break="5">25m</button>
+                        <button class="mode-btn" data-work="50" data-break="10">50m</button>
+                        <button class="mode-btn" data-work="120" data-break="15">120m</button>
+                    </div>
+                    <div class="timer-display" id="timer-display">25:00</div>
+                    <div class="timer-controls">
+                        <button class="btn btn-primary" id="start-timer"><i class="fa-solid fa-play"></i> Start</button>
+                        <button class="btn btn-secondary" id="reset-timer"><i
+                                class="fa-solid fa-rotate-left"></i></button>
+                    </div>
+                    <button class="btn btn-danger w-100 mt-3" id="enter-lock-mode"><i class="fa-solid fa-lock"></i>
+                        Enter Focus Lock</button>
+                </div>
+
+                <!-- Innovative: Productivity Stats -->
+                <div class="bento-card stats-card">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-chart-line" style="color: #3b82f6;"></i> Analytics</h2>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <i class="fa-solid fa-fire text-orange"></i>
+                            <div class="stat-value">3</div>
+                            <div class="stat-label">Day Streak</div>
+                        </div>
+                        <div class="stat-box">
+                            <i class="fa-solid fa-stopwatch text-blue"></i>
+                            <div class="stat-value">12h</div>
+                            <div class="stat-label">Focused</div>
+                        </div>
+                        <div class="stat-box">
+                            <i class="fa-solid fa-check-double text-green"></i>
+                            <div class="stat-value">18</div>
+                            <div class="stat-label">Tasks Done</div>
+                        </div>
+                    </div>
+                    <div style="height: 180px; margin-top: 1.5rem;">
+                        <canvas id="productivityChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Innovative: Ambient Sounds -->
+                <div class="bento-card sounds-card">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-headphones" style="color: #8b5cf6;"></i> Focus Sounds</h2>
+                    </div>
+                    <p class="text-sm text-muted mb-3">Boost your concentration.</p>
+                    <div class="sound-toggles">
+                        <button class="sound-btn" data-sound="rain"><i class="fa-solid fa-cloud-rain"></i> Rainy
+                            Lofi</button>
+                        <button class="sound-btn" data-sound="cafe"><i class="fa-solid fa-mug-hot"></i> Coffee
+                            Jazz</button>
+                        <button class="sound-btn" data-sound="fire"><i class="fa-solid fa-fire"></i> Cozy Piano</button>
+                        <button class="sound-btn" data-sound="space"><i class="fa-solid fa-shuttle-space"></i> Space
+                            Ambient</button>
+                    </div>
+                    <!-- Hidden audio elements -->
+                    <audio id="audio-rain" loop
+                        src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808737487.mp3?filename=lofi-study-112191.mp3"></audio>
+                    <audio id="audio-cafe" loop
+                        src="https://cdn.pixabay.com/download/audio/2022/01/21/audio_31742c5825.mp3?filename=coffee-shop-jazz-2453.mp3"></audio>
+                    <audio id="audio-fire" loop
+                        src="https://cdn.pixabay.com/download/audio/2022/08/02/audio_88458946ef.mp3?filename=relaxing-piano-music-116345.mp3"></audio>
+                    <audio id="audio-space" loop
+                        src="https://cdn.pixabay.com/download/audio/2022/03/10/audio_c8c8a1b6c7.mp3?filename=deep-space-ambient-music-8911.mp3"></audio>
+                </div>
+
+                <!-- Task Planner & Calendar (Spans full width) -->
+                <div class="bento-card tasks-card">
+                    <div class="card-header">
+                        <h2><i class="fa-regular fa-calendar-check task-icon"></i> Task Planner & Calendar</h2>
+                    </div>
+                    <div class="planner-layout">
+                        <!-- Left: Calendar -->
+                        <div class="calendar-section">
+                            <div class="calendar-header">
+                                <button id="prev-month" class="icon-btn"><i
+                                        class="fa-solid fa-chevron-left"></i></button>
+                                <h3 id="month-year">Month Year</h3>
+                                <button id="next-month" class="icon-btn"><i
+                                        class="fa-solid fa-chevron-right"></i></button>
+                            </div>
+                            <div class="calendar-grid-header">
+                                <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
+                            </div>
+                            <div class="calendar-grid" id="calendar-days">
+                                <!-- JS Calendar Days -->
+                            </div>
+                        </div>
+
+                        <!-- Right: Tasks -->
+                        <div class="tasks-section">
+                            <form id="add-task-form" class="add-task-wrapper">
+                                <input type="text" id="new-task-input" placeholder="What needs to be done?" required>
+                                <button type="submit" class="btn btn-primary"><i class="fa-solid fa-plus"></i></button>
+                            </form>
+                            <div class="tasks-list" id="tasks-list">
+                                <div class="loading">Loading tasks...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Long-Term Goal Tracker -->
+                <div class="bento-card goals-card full-width">
+                    <div class="card-header">
+                        <h2><i class="fa-solid fa-mountain goal-icon"></i> Long-Term Goals</h2>
+                        <button class="icon-btn" id="open-goal-modal"><i class="fa-solid fa-plus"></i></button>
+                    </div>
+                    <div class="goals-list" id="goals-list">
+                        <div class="loading">Loading goals...</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Full Screen Focus Lock Overlay -->
+    <div id="focus-lock-overlay" class="hidden">
+        <div class="lock-content">
+            <h1 class="lock-title"><i class="fa-solid fa-lock"></i> System Locked: Focus Mode</h1>
+            <p class="lock-subtitle">Stay focused. Procrastination is the enemy of success.</p>
+
+            <div class="lock-timer" id="overlay-timer-display">25:00</div>
+
+            <div class="feature-box">
+                <h3><i class="fa-brands fa-youtube" style="color: #ff0000;"></i> Active Lecture Viewer</h3>
+                <p>You can access educational content like YouTube lectures during Focus Lock.</p>
+                <div class="yt-loader-card">
+                    <input type="text" id="yt-url-input" placeholder="Paste YouTube Link or Video ID"
+                        class="w-100 mb-2">
+                    <button id="load-yt-btn" class="btn btn-primary w-100">Load Watch Window</button>
+                </div>
+                <div id="yt-iframe-container" class="mt-3">
+                    <!-- YouTube iframe injected here -->
+                </div>
+            </div>
+
+            <button id="exit-lock-btn" class="btn btn-danger mt-4"><i class="fa-solid fa-unlock"></i> Emergency
+                Unlock</button>
+        </div>
+    </div>
+
+    <!-- Add Goal Modal -->
+    <div class="modal" id="goal-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Create Long-Term Goal</h2>
+                <button class="close-btn" id="close-modal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="add-goal-form">
+                <div class="form-group">
+                    <label>Life Goal / Milestone</label>
+                    <input type="text" id="goal-title-input" placeholder="e.g. Become a Sr. Developer by 2028" required>
+                </div>
+                <div class="form-group">
+                    <label>Current Progress (%)</label>
+                    <input type="number" id="goal-progress-input" min="0" max="100" value="0">
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Save Goal</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal" id="settings-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fa-solid fa-gear"></i> FocusBuddy Settings</h2>
+                <button class="close-btn" id="close-settings-modal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="settings-form">
+                <div class="form-group">
+                    <label>Daily Deep Work Goal (Hours)</label>
+                    <input type="number" id="setting-daily-goal" min="1" max="16" value="4">
+                </div>
+                <div class="form-group" style="display:flex; align-items:center; gap: 10px;">
+                    <input type="checkbox" id="setting-auto-break" style="width:20px;">
+                    <label style="margin:0;">Auto-Start Break Timer</label>
+                </div>
+                <div class="form-group" style="display:flex; align-items:center; gap: 10px;">
+                    <input type="checkbox" id="setting-strict-mode" style="width:20px;">
+                    <label style="margin:0; color: #ef4444;">Strict Mode (Fail session on early exit)</label>
+                </div>
+                <div class="form-group">
+                    <label>Alert Volume (%)</label>
+                    <input type="range" id="setting-volume" min="0" max="100" value="70" class="w-100">
+                </div>
+                <button type="submit" class="btn btn-primary w-100 mt-3">Save Preferences</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="/static/js/dashboard.js"></script>
+</body>
+
+</html>

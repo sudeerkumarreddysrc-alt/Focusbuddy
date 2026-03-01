@@ -1,0 +1,400 @@
+:root {
+    --text-main: #ffffff;
+    --text-card-title: #1a365d;
+    --text-card-desc: #4a5568;
+    --btn-bg: #2b6cb0;
+    --btn-hover: #1e4a85;
+
+    /* Main brand colors from the image */
+    --top-bg-start: #1c4980;
+    --top-bg-end: #367ccb;
+    --wave-fill: #1e4a85;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Outfit', sans-serif;
+}
+
+body {
+    background: var(--wave-fill);
+    /* Base fallback */
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- Top Area with Gradient --- */
+.top-background {
+    background: linear-gradient(135deg, var(--top-bg-start) 0%, var(--top-bg-end) 100%);
+    position: relative;
+    padding-bottom: 0;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem 4rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    position: relative;
+    font-size: 2rem;
+    font-weight: 800;
+}
+
+.logo span {
+    margin-left: 2.5rem;
+}
+
+.logo i.fa-cloud {
+    font-size: 2.8rem;
+    position: absolute;
+    left: 0;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.nav-links a {
+    color: rgba(255, 255, 255, 0.85);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    color: #ffffff;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-left: 1.5rem;
+    cursor: pointer;
+}
+
+.user-profile span {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.profile-icon {
+    font-size: 1.8rem;
+    color: #ffffff;
+}
+
+.nav-caret {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Hero Section */
+.hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4rem 4rem 8rem 4rem;
+    /* Bottom padding gives room for wave */
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+    position: relative;
+    z-index: 2;
+}
+
+.hero-content h1 {
+    font-size: 4.5rem;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 2rem;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.hero-content p {
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.95);
+    max-width: 600px;
+}
+
+.hero-illustration {
+    flex-shrink: 0;
+    width: 550px;
+    height: auto;
+}
+
+.hero-illustration img {
+    width: 100%;
+    border-radius: 20px;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25);
+    transition: transform 0.3s ease;
+}
+
+.hero-illustration img:hover {
+    transform: translateY(-10px);
+}
+
+/* Curvey Wave SVG */
+.wave {
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    z-index: 1;
+}
+
+.wave svg {
+    display: block;
+    width: calc(130% + 1.3px);
+    height: 150px;
+}
+
+.wave .shape-fill {
+    fill: var(--wave-fill);
+}
+
+/* --- Bottom Area --- */
+.bottom-section {
+    background: var(--wave-fill);
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Cards Section */
+.cards-section {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3rem;
+    padding: 4rem 4rem 6rem 4rem;
+    max-width: 1400px;
+    margin: -100px auto 0 auto;
+    /* Pull it slightly into the wave area for depth */
+    width: 100%;
+    position: relative;
+    z-index: 3;
+}
+
+.card {
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 3rem 2.5rem;
+    text-align: center;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+
+    /* Simulate the subtle wavy background inside the card top */
+    background-image: radial-gradient(circle at top center, #f0f7ff 0%, #f0f7ff 40%, transparent 40.5%);
+    background-size: 100% 250px;
+    background-repeat: no-repeat;
+    position: relative;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-15px);
+    box-shadow: 0 35px 60px rgba(0, 0, 0, 0.2);
+}
+
+.card-icon-container {
+    height: 100px;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+}
+
+.card-icon {
+    font-size: 5rem;
+    filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.1));
+}
+
+.card-icon.blue {
+    color: #2b6cb0;
+}
+
+.card-icon.red {
+    color: #dc2626;
+}
+
+.card h2 {
+    color: var(--text-card-title);
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    position: relative;
+    z-index: 2;
+}
+
+.card p {
+    color: var(--text-card-desc);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 2.5rem;
+    flex-grow: 1;
+    font-weight: 500;
+    position: relative;
+    z-index: 2;
+}
+
+.card-btn {
+    background: var(--btn-bg);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 1.2rem 2.5rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.3s;
+    box-shadow: 0 8px 25px rgba(43, 108, 176, 0.4);
+    position: relative;
+    z-index: 2;
+}
+
+.card-btn:hover {
+    background: var(--btn-hover);
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 12px 30px rgba(43, 108, 176, 0.5);
+}
+
+/* Footer Section */
+footer {
+    padding: 0 4rem 4rem 4rem;
+    text-align: center;
+    margin-top: auto;
+}
+
+.footer-line {
+    width: 100%;
+    max-width: 800px;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.15);
+    margin: 0 auto 2rem auto;
+}
+
+footer p {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.75);
+    font-weight: 300;
+    letter-spacing: 0.5px;
+    margin-bottom: 2rem;
+}
+
+footer strong {
+    font-weight: 700;
+    color: #ffffff;
+    font-style: italic;
+}
+
+.brand-logo-img {
+    height: 48px;
+    object-fit: contain;
+}
+
+/* Team Acetone Branding */
+.team-branding {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.team-branding p {
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.team-logo-container {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.5rem 1.2rem;
+    border-radius: 50px;
+    backdrop-filter: blur(5px);
+}
+
+.team-logo-container img {
+    height: 24px;
+    width: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.team-logo-container span {
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: 1px;
+}
+
+/* Responsiveness */
+@media (max-width: 1200px) {
+    .cards-section {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .hero {
+        padding: 3rem 2rem 6rem 2rem;
+    }
+
+    .hero-content h1 {
+        font-size: 3.5rem;
+    }
+}
+
+@media (max-width: 900px) {
+    .hero {
+        flex-direction: column;
+        text-align: center;
+        padding-top: 2rem;
+    }
+
+    .hero-content p {
+        margin: 0 auto 3rem auto;
+    }
+
+    .cards-section {
+        grid-template-columns: 1fr;
+        padding: 2rem 2rem 4rem 2rem;
+        margin-top: -50px;
+    }
+
+    .nav-links {
+        display: none;
+    }
+
+    .logo {
+        margin: 0 auto;
+    }
+}

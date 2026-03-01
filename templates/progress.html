@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Buddy - Progress</title>
+    <link rel="stylesheet" href="/static/css/dashboard.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .progress-wrapper {
+            padding: 3rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            flex: 1;
+        }
+
+        .progress-header {
+            margin-bottom: 2.5rem;
+        }
+
+        .progress-header h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .progress-header p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            margin-top: 0.4rem;
+        }
+
+        .summary-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .summary-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 1.5rem 2rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+        }
+
+        .summary-icon {
+            font-size: 2rem;
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .icon-blue {
+            background: #eff6ff;
+            color: #2b6cb0;
+        }
+
+        .icon-green {
+            background: #f0fdf4;
+            color: #10b981;
+        }
+
+        .icon-purple {
+            background: #f5f3ff;
+            color: #8b5cf6;
+        }
+
+        .summary-info strong {
+            font-size: 1.8rem;
+            font-weight: 800;
+            font-family: 'Outfit', sans-serif;
+            color: var(--text-main);
+        }
+
+        .summary-info span {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .chart-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 2rem 2.5rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            margin-bottom: 2rem;
+        }
+
+        .chart-card h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .charts-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+        }
+
+        canvas {
+            max-height: 300px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="/static/img/cloud-logo.png" alt="Logo" class="brand-logo-img">
+                <span>Cloud Buddy</span>
+            </div>
+            <nav class="nav-menu">
+                <a href="/" class="nav-item"><i class="fa-solid fa-house"></i> Home</a>
+                <a href="/dashboard" class="nav-item"><i class="fa-solid fa-chart-pie"></i> Overview</a>
+                <a href="/progress" class="nav-item active"><i class="fa-solid fa-chart-line"></i> Progress</a>
+                <a href="/dashboard#tasks" class="nav-item"><i class="fa-solid fa-list-check"></i> Planner</a>
+                <a href="/dashboard#goals" class="nav-item"><i class="fa-solid fa-bullseye"></i> Goals</a>
+                <a href="/logout" class="nav-item text-danger"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+            </nav>
+            <div class="sidebar-bottom">
+                <div class="user-profile mt-3">
+                    <img src="https://ui-avatars.com/api/?name=Cloud+Buddy&background=2b6cb0&color=fff" alt="User">
+                    <div class="user-info">
+                        <strong>My Progress</strong>
+                        <span>Growth Tracker</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main -->
+        <main class="main-content">
+            <div class="progress-wrapper">
+                <div class="progress-header">
+                    <h1><i class="fa-solid fa-chart-line" style="color:#2b6cb0;"></i> Your Growth</h1>
+                    <p>Track how your focus, tasks, and habits evolve over time.</p>
+                </div>
+
+                <!-- Summary Cards -->
+                <div class="summary-row">
+                    <div class="summary-card">
+                        <div class="summary-icon icon-blue"><i class="fa-solid fa-clock"></i></div>
+                        <div class="summary-info">
+                            <strong id="total-hours">0h</strong><br>
+                            <span>Total Focus Hours</span>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-icon icon-green"><i class="fa-solid fa-check-double"></i></div>
+                        <div class="summary-info">
+                            <strong id="total-completed">0</strong><br>
+                            <span>Tasks Completed</span>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-icon icon-purple"><i class="fa-solid fa-stopwatch"></i></div>
+                        <div class="summary-info">
+                            <strong id="total-sessions">0</strong><br>
+                            <span>Focus Sessions</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Row -->
+                <div class="charts-row">
+                    <!-- Line chart -->
+                    <div class="chart-card">
+                        <h2><i class="fa-solid fa-chart-line" style="color:#2b6cb0;"></i> Focus Hours Growth</h2>
+                        <canvas id="growthLineChart"></canvas>
+                    </div>
+                    <!-- Doughnut chart -->
+                    <div class="chart-card">
+                        <h2><i class="fa-solid fa-chart-pie" style="color:#10b981;"></i> Task Distribution</h2>
+                        <canvas id="taskDonutChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        async function loadProgress() {
+            // Fetch analytics
+            const res = await fetch('/api/analytics');
+            const data = await res.json();
+
+            document.getElementById('total-hours').textContent = `${data.total_focus_hours}h`;
+            document.getElementById('total-completed').textContent = data.tasks_completed;
+            document.getElementById('total-sessions').textContent = data.total_sessions;
+
+            // --- Line Chart (simulate daily growth from sessions data) ---
+            const sessions = await fetch('/api/sessions').then(r => r.json());
+
+            // Group sessions by day
+            const dayMap = {};
+            sessions.forEach(s => {
+                const day = new Date(s.completed_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                dayMap[day] = (dayMap[day] || 0) + (s.duration_minutes / 60);
+            });
+
+            // Build last 7 unique days (or fill zeros for current week)
+            const today = new Date();
+            const labels = [];
+            const values = [];
+            for (let i = 6; i >= 0; i--) {
+                const d = new Date(today);
+                d.setDate(today.getDate() - i);
+                const label = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                labels.push(label);
+                values.push(parseFloat((dayMap[label] || 0).toFixed(2)));
+            }
+
+            new Chart(document.getElementById('growthLineChart').getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels,
+                    datasets: [{
+                        label: 'Focus Hours',
+                        data: values,
+                        fill: true,
+                        backgroundColor: 'rgba(43, 108, 176, 0.1)',
+                        borderColor: '#2b6cb0',
+                        tension: 0.4,
+                        pointBackgroundColor: '#2b6cb0',
+                        pointRadius: 5,
+                        pointHoverRadius: 8,
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { mode: 'index', intersect: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: '#f1f5f9' },
+                            ticks: { font: { family: 'Inter' } }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { font: { family: 'Inter' } }
+                        }
+                    }
+                }
+            });
+
+            // --- Doughnut chart for task distribution ---
+            const completed = data.tasks_completed;
+            const pending = data.tasks_planned - data.tasks_completed;
+
+            new Chart(document.getElementById('taskDonutChart').getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Completed', 'Pending'],
+                    datasets: [{
+                        data: [completed || 0, pending > 0 ? pending : 0],
+                        backgroundColor: ['#10b981', '#e2e8f0'],
+                        borderWidth: 0,
+                        hoverOffset: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    cutout: '72%',
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { font: { family: 'Inter', size: 12 }, padding: 16 }
+                        }
+                    }
+                }
+            });
+        }
+
+        loadProgress();
+    </script>
+</body>
+
+</html>
